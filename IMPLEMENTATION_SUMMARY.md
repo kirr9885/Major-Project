@@ -5,6 +5,7 @@
 Your complete sensor → backend → Flutter app pipeline is now ready for deployment. Here's what has been implemented:
 
 ### 1. **ESP32 Sensor Code** ✓
+
 - **File**: `sensor-reading-code/src/main.cpp`
 - **Features**:
   - WiFi connectivity with auto-reconnect
@@ -21,6 +22,7 @@ Your complete sensor → backend → Flutter app pipeline is now ready for deplo
   - Displays responses in serial monitor
 
 ### 2. **Backend Server** ✓
+
 - **Already configured** in `backend/`
 - **What it does**:
   - Receives sensor data via POST endpoint
@@ -36,6 +38,7 @@ Your complete sensor → backend → Flutter app pipeline is now ready for deplo
   - `GET /health` - Health check
 
 ### 3. **Flutter App** ✓
+
 - **Already configured** in `fruit_pulse/`
 - **What it does**:
   - Connects to WebSocket automatically
@@ -51,7 +54,9 @@ Your complete sensor → backend → Flutter app pipeline is now ready for deplo
   - LiveSensorService handles WebSocket connection
 
 ### 4. **Documentation & Testing** ✓
+
 Created comprehensive guides:
+
 - `PIPELINE_SETUP.md` - Complete setup instructions
 - `QUICK_START.md` - Fast 5-minute quick reference
 - `TESTING_GUIDE.md` - Detailed testing procedures
@@ -63,6 +68,7 @@ Created comprehensive guides:
 ## 🚀 Quick Start (5 Minutes)
 
 ### Backend
+
 ```bash
 cd backend
 npm install
@@ -72,6 +78,7 @@ npm run dev
 ```
 
 ### ESP32
+
 1. Edit `sensor-reading-code/src/main.cpp`:
    - Line 5: WiFi SSID
    - Line 6: WiFi password
@@ -79,13 +86,16 @@ npm run dev
    - Line 10: API key (match with backend `.env`)
 
 2. Upload:
+
 ```bash
 cd sensor-reading-code
 pio run -t upload
 ```
 
 ### Flutter
+
 Edit `fruit_pulse/lib/core/constants/api_config.dart`:
+
 ```dart
 // For Android emulator:
 static const String host = '10.0.2.2';
@@ -95,6 +105,7 @@ static const String host = '192.168.1.10';  // Your computer IP
 ```
 
 Run:
+
 ```bash
 cd fruit_pulse
 flutter run

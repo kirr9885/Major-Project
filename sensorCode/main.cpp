@@ -9,10 +9,12 @@
    WIFI
 ===================================================== */
 
-const char* ssid = "nrb116_fpkhr";
-const char* password = "Acharya116@";
+const char *ssid = "nrb116_fpkhr";
+const char *password = "Acharya116@";
 
-const char* server = "http://192.168.1.99:5000/predict";
+const char *server =
+    "http://192.168.1.88:5000/api/v1/sensor-data";
+const char *apiKey = "major-project-secret-key873468734r";
 
 /* =====================================================
    BME680
@@ -58,6 +60,11 @@ float gas = 0;
 float baselineGas = 0;
 float gasDifference = 0;
 float vocPercent = 0;
+/* =====================================================
+   DATA STORAGE
+===================================================== */
+
+String storedData = "";
 
 /* =====================================================
    CONTROL VARIABLES
@@ -147,10 +154,9 @@ int mapColor(int value, int minVal, int maxVal)
 ===================================================== */
 
 void sendToServer(
-  int R,
-  int G,
-  int B
-)
+    int R,
+    int G,
+    int B)
 {
   if (WiFi.status() == WL_CONNECTED)
   {
@@ -159,6 +165,7 @@ void sendToServer(
     http.begin(server);
 
     http.addHeader("Content-Type", "application/json");
+    http.addHeader("X-API-Key", apiKey);
 
     String json = "{";
 
@@ -166,15 +173,15 @@ void sendToServer(
     json += "\"Green\":" + String(G) + ",";
     json += "\"Blue\":" + String(B) + ",";
 
-    json += "\"Temperature\":" + String(temperature) + ",";
-    json += "\"Humidity\":" + String(humidity) + ",";
-    json += "\"Pressure\":" + String(pressure) + ",";
+    json += "\"Temperature\":" + String(temperature, 2) + ",";
+    json += "\"Humidity\":" + String(humidity, 2) + ",";
+    json += "\"Pressure\":" + String(pressure, 2) + ",";
 
-    json += "\"Gas resistance in (Kohm)\":" + String(gas) + ",";
+    json += "\"Gas resistance in (Kohm)\":" + String(gas, 2) + ",";
 
-    json += "\"Difference\":" + String(gasDifference) + ",";
+    json += "\"Difference\":" + String(gasDifference, 2) + ",";
 
-    json += "\"VOC_percent\":" + String(vocPercent);
+    json += "\"VOC_percent\":" + String(vocPercent, 2);
 
     json += "}";
 
@@ -249,7 +256,8 @@ void setup()
     {
       Serial.println("BME680 NOT FOUND");
 
-      while (1);
+      while (1)
+        ;
     }
   }
 
@@ -290,6 +298,7 @@ void loop()
 
     if (input == 'r')
     {
+      storedData = "";
       baselineDone = false;
 
       fruitPlaced = false;
@@ -325,7 +334,6 @@ void loop()
       }
     }
   }
-  
 
   /* =====================================================
      UPDATE BME680
@@ -432,28 +440,32 @@ void loop()
     Serial.print("VOC %: ");
     Serial.println(vocPercent);
 
-    Serial.print(R);
-    Serial.print(",");
+    String row = "";
 
-    Serial.print(G);
-    Serial.print(",");
+    row += String(R);
+    row += ",";
 
-    Serial.print(B);
-    Serial.print(",");
+    row += String(G);
+    row += ",";
 
-    Serial.print(temperature);
-    Serial.print(",");
+    row += String(B);
+    row += ",";
 
-    Serial.print(humidity);
-    Serial.print(",");
+    row += String(temperature, 2);
+    row += ",";
 
-    Serial.print(pressure);
-    Serial.print(",");
+    row += String(humidity, 2);
+    row += ",";
 
-    Serial.print(gas);
-    Serial.print(",");
+    row += String(pressure, 2);
+    row += ",";
 
-    Serial.println(gasDifference);
+    row += String(gas, 2);
+    row += ",";
+
+    row += String(gasDifference, 2);
+
+    storedData += row + "\n";
 
     /* ------------ SEND TO SERVER ------------ */
 
@@ -463,6 +475,7 @@ void loop()
   else
   {
     Serial.println("\nFRUIT MONITORING COMPLETE");
+    Serial.println(storedData);
 
     Serial.println("SEND r FOR NEW SESSION");
 
@@ -470,5 +483,4 @@ void loop()
   }
 
   delay(5000);
-
 }
