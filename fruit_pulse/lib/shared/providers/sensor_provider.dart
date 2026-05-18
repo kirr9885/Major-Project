@@ -17,7 +17,7 @@ class SensorProvider with ChangeNotifier {
       'sensor_iteration_history_v1';
   static const String _legacyPredictionHistoryStorageKey =
       'prediction_iteration_history_v1';
-  static const int _maxSessionItems = 100;
+  static const int _maxSessionItems = 150;
   static const int _maxStoredItems = 300;
 
   final LiveSensorService _sensorService = LiveSensorService();

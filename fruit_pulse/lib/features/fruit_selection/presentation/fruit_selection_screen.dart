@@ -161,7 +161,7 @@ class FruitSelectionScreen extends StatelessWidget {
                         const SizedBox(height: 16),
 
                         Text(
-                          'Detect whether fruits are ripened using chemicals or naturally',
+                          'Detect whether the fruits are ripened using chemicals or naturally',
                           style: Theme.of(context).textTheme.bodyLarge
                               ?.copyWith(color: Colors.white70, height: 1.5),
                         ),
